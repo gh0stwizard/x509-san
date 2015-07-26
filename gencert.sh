@@ -8,17 +8,18 @@ issuer_subject="/C=${CRT_C:-"FR"}/L=${CRT_L:-"Paris"}/O=${CRT_O:-"Ekino"}/OU=${C
 alternative_name="subjectAltName=${CRT_SAN:-"DNS.1:logs.example.com,DNS.2:metrics.example.com,IP.1:192.168.0.1,IP.2:10.0.0.50"}"
 certname=${CRT_NAME:-"frntn-x509-san"}
 digest=${CRT_DIGEST:-"sha256"}
+days=${CRT_DAYS:-3650}
 
 openssl x509 \
  -in <(openssl req \
-	-days 3650 \
+	-days $days \
 	-newkey rsa:4096 \
 	-nodes \
 	-keyout "${certname}.key" \
 	-subj ${issuer_subject}) \
  -req \
  -signkey "${certname}.key" \
- -days 3650 \
+ -days $days \
  -${digest} \
  -out "${certname}.crt" \
  -extfile <(echo ${alternative_name})
